@@ -104,16 +104,28 @@ const loadFromStorage = () => {
 // 创建自定义事件监听器接收来自 content script 的消息
 window.addEventListener("message", (event) => {
   if (event.data.type === "request_captured") {
-    requests.value = event.data.urls.map((url) => {
+    const allUrls = event.data.requestUrls.map((item) => {
       return {
-        url: url,
+        url: item.url,
         origin: event.data.origin || window.location.href,
         title: event.data.title || document.title,
-        timestamp: new Date().toLocaleTimeString(),
+        timestamp: item.timestamp,
       };
     });
+    requests.value = allUrls;
+    // 过滤出10秒内的请求
+    // requests.value = allUrls.filter((item) => {
+    //   return new Date().getTime() - item.timestamp < 1000 * 10;
+    // });
   }
 });
+
+window.addEventListener("beforeunload", (event) => {
+  chrome.runtime.sendMessage({
+    type: "clear_requests",
+  });
+});
+
 onMounted(() => {
   loadFromStorage();
 });
@@ -137,10 +149,16 @@ const moveDown = (index) => {
 };
 
 const saveToStorage = (request) => {
+  chrome.runtime.sendMessage({
+    type: "clear_requests",
+    tabId: chrome.devtools.inspectedWindow.tabId,
+  });
   // 检查是否已存在相同的 URL
   const isDuplicate = savedItems.value.some(
     (item) => item.real === request.url
   );
+
+  console.log("isDuplicate", isDuplicate);
 
   // 如果不是重复的 URL，则添加到存储中
   if (!isDuplicate) {
