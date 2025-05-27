@@ -4,7 +4,11 @@
       <div class="data-content">
         <div class="filter-section">
           <div class="operation-types">
-            <select v-model="selectedSuffix" class="suffix-select">
+            <select
+              v-model="selectedSuffix"
+              @change="handleChangeType"
+              class="suffix-select"
+            >
               <option value="m3u8">过滤条件：m3u8</option>
               <option value="mp4">过滤条件：mp4</option>
               <option value="mp3">过滤条件：mp3</option>
@@ -69,20 +73,21 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 
+const savedItems = ref([]);
+
 const visible = ref(true);
 const requests = ref([]);
-const selectedSuffix = ref("m3u8");
+const selectedSuffix = ref(localStorage.getItem("filterType") || "m3u8");
+const isOpen = ref(localStorage.getItem("isopen") === "true");
 
 const filteredRequests = computed(() => {
   return requests.value.filter((request) =>
     request.url.toLowerCase().endsWith(`.${selectedSuffix.value}`)
   );
 });
-
-const savedItems = ref([]);
-
-const isOpen = ref(localStorage.getItem("isopen") === "true");
-
+const handleChangeType = () => {
+  localStorage.setItem("filterType", selectedSuffix.value);
+};
 const toggleOpen = () => {
   isOpen.value = !isOpen.value;
   localStorage.setItem("isopen", isOpen.value ? "true" : "false");
