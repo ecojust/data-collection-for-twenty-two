@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            width: 120px;
+            font-family: Arial, sans-serif;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <label for="pluginSwitch">启用插件功能</label>
+    <input type="checkbox" id="pluginSwitch" name="pluginSwitch">
+
+    <script>
+        const pluginSwitch = document.getElementById('pluginSwitch');
+        // 初始化复选框状态
+        pluginSwitch.checked = localStorage.getItem('isopen') === 'true';
+
+        // 监听复选框状态变化
+        pluginSwitch.addEventListener('change', function() {
+            localStorage.setItem('isopen', pluginSwitch.checked);
+            // 发送消息到content script
+            chrome.runtime.sendMessage({
+                type: 'TOGGLE_STATE',
+                value: pluginSwitch.checked
+            });
+        });
+    </script>
+</body>
+</html>

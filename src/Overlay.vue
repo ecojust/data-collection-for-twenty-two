@@ -81,10 +81,11 @@ const filteredRequests = computed(() => {
 
 const savedItems = ref([]);
 
-const isOpen = ref(true);
+const isOpen = ref(localStorage.getItem("isopen") === "true");
 
 const toggleOpen = () => {
   isOpen.value = !isOpen.value;
+  localStorage.setItem("isopen", isOpen.value ? "true" : "false");
 };
 
 const loadFromStorage = () => {
@@ -382,6 +383,9 @@ const clearSavedLinks = () => {
               background-color: #1879c8;
               transform: scale(1.05);
             }
+          }
+          > button + button {
+            margin-left: 4px;
           }
         }
       }
