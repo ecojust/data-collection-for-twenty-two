@@ -12,6 +12,7 @@
               <option value="m3u8">过滤条件：m3u8</option>
               <option value="mp4">过滤条件：mp4</option>
               <option value="mp3">过滤条件：mp3</option>
+              <option value="m4a">过滤条件：m4a</option>
             </select>
             <button @click="copySavedLinks">复制已保存链接</button>
             <button @click="clearSavedLinks">清空已保存链接</button>
@@ -85,8 +86,9 @@ const selectedSuffix = ref(localStorage.getItem("filterType") || "m3u8");
 const isOpen = ref(localStorage.getItem("isopen") === "true");
 
 const filteredRequests = computed(() => {
-  return requests.value.filter((request) =>
-    request.url.toLowerCase().endsWith(`.${selectedSuffix.value}`)
+  return requests.value.filter(
+    (request) =>
+      request.url.toLowerCase().indexOf(`.${selectedSuffix.value}`) > -1
   );
 });
 const handleChangeType = () => {
