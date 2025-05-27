@@ -48,7 +48,11 @@
           </div>
 
           <div class="request-list">
-            <h3>当前页面符合条件的链接</h3>
+            <h3>
+              当前页面符合条件的链接({{ filteredRequests.length }}/{{
+                requests.length
+              }})
+            </h3>
             <div
               v-for="(request, index) in filteredRequests"
               :key="index"
@@ -100,11 +104,13 @@ const loadFromStorage = () => {
 // 创建自定义事件监听器接收来自 content script 的消息
 window.addEventListener("message", (event) => {
   if (event.data.type === "request_captured") {
-    requests.value.unshift({
-      url: event.data.url,
-      origin: event.data.origin || window.location.href,
-      title: event.data.title || document.title,
-      timestamp: new Date().toLocaleTimeString(),
+    requests.value = event.data.urls.map((url) => {
+      return {
+        url: url,
+        origin: event.data.origin || window.location.href,
+        title: event.data.title || document.title,
+        timestamp: new Date().toLocaleTimeString(),
+      };
     });
   }
 });

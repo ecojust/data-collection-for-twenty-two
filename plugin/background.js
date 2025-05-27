@@ -1,1 +1,1 @@
-chrome.webRequest.onBeforeRequest.addListener(function(e){chrome.tabs.query({active:!0,currentWindow:!0},function(r){r[0]&&chrome.tabs.sendMessage(r[0].id,{type:"request_captured",url:e.url,method:e.method})})},{urls:["<all_urls>"]});
+var t=[];chrome.webRequest.onBeforeRequest.addListener(function(e){t.push(e.url),chrome.tabs.query({active:!0,currentWindow:!0},function(r){r[0]&&chrome.tabs.sendMessage(r[0].id,{type:"request_captured",urls:[...new Set(t)],method:e.method})})},{urls:["<all_urls>"]});

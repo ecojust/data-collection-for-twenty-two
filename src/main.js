@@ -1,6 +1,11 @@
 import { createApp } from 'vue'
 import Overlay from './Overlay.vue'
-
+// 监听来自后台脚本的消息
+chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === 'request_captured') {
+        window.postMessage(message, '*')
+    }
+})
 // 创建容器元素
 const container = document.createElement('div')
 container.id = 'data-collection-for-twenty-two'
@@ -17,9 +22,3 @@ document.body.appendChild(container)
 const app = createApp(Overlay)
 app.mount('#data-collection-for-twenty-two')
 
-// 监听来自后台脚本的消息
-chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'request_captured') {
-        window.postMessage(message, '*')
-    }
-})
