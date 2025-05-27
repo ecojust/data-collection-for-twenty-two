@@ -149,10 +149,6 @@ const moveDown = (index) => {
 };
 
 const saveToStorage = (request) => {
-  chrome.runtime.sendMessage({
-    type: "clear_requests",
-    tabId: chrome.devtools.inspectedWindow.tabId,
-  });
   // 检查是否已存在相同的 URL
   const isDuplicate = savedItems.value.some(
     (item) => item.real === request.url
@@ -169,6 +165,11 @@ const saveToStorage = (request) => {
     });
     localStorage.setItem("saved_urls", JSON.stringify(savedItems.value));
   }
+
+  chrome.runtime.sendMessage({
+    type: "clear_requests",
+    tabId: chrome.devtools.inspectedWindow.tabId,
+  });
 };
 
 const removeFromStorage = (index) => {
