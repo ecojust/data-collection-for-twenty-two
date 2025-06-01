@@ -59,10 +59,10 @@
               :key="index"
               class="request-item"
             >
-              <div class="request-url">{{ request.url }}</div>
               <button class="save-btn" @click="saveToStorage(request)">
                 保存
               </button>
+              <div class="request-url">{{ request.url }}</div>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ const clearSavedLinks = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999999999;
   top: -300px;
   position: relative;
   transition: all 0.3s ease;
@@ -239,7 +239,7 @@ const clearSavedLinks = () => {
       width: 100%;
       height: 300px;
       padding: 8px 30px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(237, 214, 214, 0.359);
       box-sizing: border-box;
       .filter-section {
         height: 40px;
@@ -470,6 +470,7 @@ const clearSavedLinks = () => {
             cursor: pointer;
             font-weight: 500;
             transition: all 0.2s ease;
+            margin-right: 10px;
 
             &:hover {
               background-color: #357abd;
